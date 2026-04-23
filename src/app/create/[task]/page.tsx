@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Plus, Save } from "lucide-react";
 import { NavbarShell } from "@/components/shared/navbar-shell";
+import { Footer } from "@/components/shared/footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -70,8 +71,8 @@ const FORM_CONFIG: Record<TaskKey, { title: string; description: string; fields:
     ],
   },
   article: {
-    title: "Create Article",
-    description: "Write a local-only article post.",
+    title: "Create article",
+    description: "Draft a story for this device—saved locally until you publish through your usual workflow.",
     fields: [
       { key: "title", label: "Article title", type: "text", required: true },
       { key: "summary", label: "Short summary", type: "textarea", required: true },
@@ -94,8 +95,8 @@ const FORM_CONFIG: Record<TaskKey, { title: string; description: string; fields:
     ],
   },
   profile: {
-    title: "Create Profile",
-    description: "Create a local-only business profile.",
+    title: "Create profile",
+    description: "Add a writer, editor, or subject profile—stored locally for demos and previews.",
     fields: [
       { key: "brandName", label: "Brand name", type: "text", required: true },
       { key: "summary", label: "Short summary", type: "textarea", required: true },
@@ -182,20 +183,23 @@ export default function CreateTaskPage() {
 
   if (!taskConfig || !formConfig) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-[#f6f8f7] text-slate-900">
         <NavbarShell />
-        <main className="mx-auto max-w-3xl px-4 py-16 text-center">
-          <h1 className="text-2xl font-semibold text-foreground">Task not available</h1>
-          <p className="mt-2 text-muted-foreground">
-            This task is not enabled for the current site.
-          </p>
-          <Button className="mt-6" asChild>
-            <Link href="/">Back home</Link>
-          </Button>
+        <main className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+          <div className="rounded-[2rem] border border-slate-200 bg-white p-10 text-center shadow-sm">
+            <h1 className="text-2xl font-bold text-slate-900">Task not available</h1>
+            <p className="mt-3 text-sm leading-relaxed text-slate-600">This content type is not enabled for the current site.</p>
+            <Button className="mt-8 rounded-full bg-[#1a9b8f] px-6 text-white hover:bg-[#158a7f]" asChild>
+              <Link href="/">Back home</Link>
+            </Button>
+          </div>
         </main>
+        <Footer />
       </div>
     );
   }
+
+  const magazineEditorial = taskKey === "article" || taskKey === "profile";
 
   const updateValue = (key: string, value: string) =>
     setValues((prev) => ({ ...prev, [key]: value }));
@@ -270,47 +274,101 @@ export default function CreateTaskPage() {
     router.push(`/local/${taskKey}/${post.slug}`);
   };
 
-  return (
-    <div className="min-h-screen bg-background">
-      <NavbarShell />
-      <main className="mx-auto max-w-4xl px-4 py-12">
-        <div className="mb-8 flex items-center gap-3">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/">
-              <ArrowLeft className="h-5 w-5" />
-            </Link>
-          </Button>
-          <div>
-            <h1 className="text-2xl font-semibold text-foreground">{formConfig.title}</h1>
-            <p className="text-sm text-muted-foreground">{formConfig.description}</p>
-          </div>
-        </div>
+  const fieldClass =
+    "h-11 rounded-xl border border-slate-200 bg-slate-50/80 px-3 text-sm outline-none ring-[#1a9b8f]/20 focus:border-[#1a9b8f] focus:ring-4";
+  const textareaClass =
+    "min-h-[120px] rounded-xl border border-slate-200 bg-slate-50/80 px-3 py-3 text-sm outline-none ring-[#1a9b8f]/20 focus:border-[#1a9b8f] focus:ring-4";
 
-        <div className="rounded-3xl border border-border bg-card p-8 shadow-sm">
-          <div className="flex flex-wrap gap-2">
-            <Badge variant="secondary">{taskConfig.label}</Badge>
-            <Badge variant="outline">Local-only</Badge>
+  return (
+    <div className="min-h-screen bg-[#f6f8f7] text-slate-900">
+      <NavbarShell />
+      {magazineEditorial ? (
+        <header className="border-b border-slate-200/80 bg-gradient-to-br from-[#0c3d3a] via-[#0f524c] to-[#1a7a72] px-4 py-10 text-white sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-4xl">
+            <Button
+              variant="ghost"
+              size="sm"
+              asChild
+              className="mb-5 rounded-full border border-white/25 bg-white/10 px-4 text-white hover:bg-white/15"
+            >
+              <Link href={taskConfig.route}>
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to {taskConfig.label}
+              </Link>
+            </Button>
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#a8ebe3]">Create</p>
+            <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">{formConfig.title}</h1>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/88">{formConfig.description}</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <span className="rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-medium text-white/95">
+                {user?.name ? `Signed in as ${user.name}` : "Sign in required to save"}
+              </span>
+              <span className="rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-medium text-white/95">
+                Local preview
+              </span>
+            </div>
           </div>
+        </header>
+      ) : null}
+
+      <main className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
+        {!magazineEditorial ? (
+          <div className="mb-8 flex items-center gap-3">
+            <Button variant="ghost" size="icon" asChild className="rounded-full border border-slate-200 bg-white shadow-sm">
+              <Link href={taskConfig.route}>
+                <ArrowLeft className="h-5 w-5" />
+              </Link>
+            </Button>
+            <div>
+              <h1 className="text-2xl font-bold text-slate-900">{formConfig.title}</h1>
+              <p className="text-sm text-slate-600">{formConfig.description}</p>
+            </div>
+          </div>
+        ) : null}
+
+        {magazineEditorial ? (
+          <aside className="mb-8 rounded-2xl border border-[#1a9b8f]/25 bg-gradient-to-r from-[#e8faf8] to-white p-5 text-sm leading-relaxed text-slate-700 shadow-sm">
+            <strong className="text-[#0c3d3a]">Tip:</strong> URLs for images and logos should be direct links (https). After saving you will
+            land on a local preview URL—refresh the {taskKey === "article" ? "Articles" : "Profiles"} list to see your entry in the grid.
+          </aside>
+        ) : null}
+
+        <div className="rounded-[2rem] border border-slate-200/90 bg-white p-6 shadow-sm sm:p-10">
+          {!magazineEditorial ? (
+            <div className="flex flex-wrap gap-2">
+              <Badge className="border-slate-200 bg-slate-100 text-slate-800">{taskConfig.label}</Badge>
+              <Badge variant="outline" className="border-slate-200 text-slate-600">
+                Local-only
+              </Badge>
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              <Badge className="border-[#1a9b8f]/30 bg-[#e0f5f2] text-[#0c3d3a]">{taskConfig.label}</Badge>
+              <Badge variant="outline" className="border-slate-200 text-slate-600">
+                Saved in this browser
+              </Badge>
+            </div>
+          )}
 
           <div className="mt-6 grid gap-6">
             {formConfig.fields.map((field) => (
               <div key={field.key} className="grid gap-2">
-                <Label>
-                  {field.label} {field.required ? <span className="text-red-500">*</span> : null}
+                <Label className="text-sm font-medium text-slate-700">
+                  {field.label} {field.required ? <span className="text-red-600">*</span> : null}
                 </Label>
                 {field.type === "textarea" ? (
                   <Textarea
-                    rows={4}
+                    rows={field.key === "description" ? 8 : 4}
                     placeholder={field.placeholder}
                     value={values[field.key] || ""}
                     onChange={(event) => updateValue(field.key, event.target.value)}
-                    className="border-2 border-slate-200 bg-white focus-visible:ring-2 focus-visible:ring-primary/30"
+                    className={textareaClass}
                   />
                 ) : field.type === "category" ? (
                   <select
                     value={values[field.key] || ""}
                     onChange={(event) => updateValue(field.key, event.target.value)}
-                    className="h-11 rounded-lg border-2 border-slate-200 bg-white px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                    className={fieldClass}
                   >
                     <option value="">Select category</option>
                     {CATEGORY_OPTIONS.map((option) => (
@@ -324,6 +382,7 @@ export default function CreateTaskPage() {
                     <Input
                       type="file"
                       accept="application/pdf"
+                      className={fieldClass}
                       onChange={(event) => {
                         const file = event.target.files?.[0];
                         if (!file) return;
@@ -353,10 +412,9 @@ export default function CreateTaskPage() {
                       placeholder="Or paste a PDF URL"
                       value={values[field.key] || ""}
                       onChange={(event) => updateValue(field.key, event.target.value)}
+                      className={fieldClass}
                     />
-                    {uploadingPdf ? (
-                      <p className="text-xs text-muted-foreground">Uploading PDF…</p>
-                    ) : null}
+                    {uploadingPdf ? <p className="text-xs text-slate-500">Uploading PDF…</p> : null}
                   </div>
                 ) : (
                   <Input
@@ -368,7 +426,7 @@ export default function CreateTaskPage() {
                     }
                     value={values[field.key] || ""}
                     onChange={(event) => updateValue(field.key, event.target.value)}
-                    className="h-11 border-2 border-slate-200 bg-white focus-visible:ring-2 focus-visible:ring-primary/30"
+                    className={fieldClass}
                   />
                 )}
               </div>
@@ -376,11 +434,14 @@ export default function CreateTaskPage() {
           </div>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button onClick={handleSubmit}>
+            <Button
+              onClick={handleSubmit}
+              className="rounded-full bg-[#1a9b8f] px-6 text-white shadow-sm hover:bg-[#158a7f]"
+            >
               <Save className="mr-2 h-4 w-4" />
               Save locally
             </Button>
-            <Button variant="ghost" asChild>
+            <Button variant="outline" asChild className="rounded-full border-slate-200 bg-white">
               <Link href={taskConfig.route}>
                 View {taskConfig.label}
                 <Plus className="ml-2 h-4 w-4" />
@@ -389,6 +450,7 @@ export default function CreateTaskPage() {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

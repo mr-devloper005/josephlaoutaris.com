@@ -1,106 +1,76 @@
 import Link from 'next/link'
-import { Bookmark, Building2, FileText, Image as ImageIcon, Sparkles } from 'lucide-react'
-import { NavbarShell } from '@/components/shared/navbar-shell'
-import { Footer } from '@/components/shared/footer'
-import { getFactoryState } from '@/design/factory/get-factory-state'
-import { getProductKind } from '@/design/factory/get-product-kind'
-import { REGISTER_PAGE_OVERRIDE_ENABLED, RegisterPageOverride } from '@/overrides/register-page'
+import { Check, Newspaper } from 'lucide-react'
+import { MagazineShell, MagazineContentSection, MagazinePageHeader } from '@/components/magazine/magazine-shell'
+import { MagazineRegisterForm } from '@/components/magazine/magazine-register-form'
+import { ContentImage } from '@/components/shared/content-image'
+import { SITE_CONFIG } from '@/lib/site-config'
 
-function getRegisterConfig(kind: ReturnType<typeof getProductKind>) {
-  if (kind === 'directory') {
-    return {
-      shell: 'bg-[#f8fbff] text-slate-950',
-      panel: 'border border-slate-200 bg-white',
-      side: 'border border-slate-200 bg-slate-50',
-      muted: 'text-slate-600',
-      action: 'bg-slate-950 text-white hover:bg-slate-800',
-      icon: Building2,
-      title: 'Create a business-ready account',
-      body: 'List services, manage locations, and activate trust signals with a proper directory workflow.',
-    }
-  }
-  if (kind === 'editorial') {
-    return {
-      shell: 'bg-[#fbf6ee] text-[#241711]',
-      panel: 'border border-[#dcc8b7] bg-[#fffdfa]',
-      side: 'border border-[#e6d6c8] bg-[#fff4e8]',
-      muted: 'text-[#6e5547]',
-      action: 'bg-[#241711] text-[#fff1e2] hover:bg-[#3a241b]',
-      icon: FileText,
-      title: 'Start your contributor workspace',
-      body: 'Create a profile for essays, issue drafts, editorial review, and publication scheduling.',
-    }
-  }
-  if (kind === 'visual') {
-    return {
-      shell: 'bg-[#07101f] text-white',
-      panel: 'border border-white/10 bg-white/6',
-      side: 'border border-white/10 bg-white/5',
-      muted: 'text-slate-300',
-      action: 'bg-[#8df0c8] text-[#07111f] hover:bg-[#77dfb8]',
-      icon: ImageIcon,
-      title: 'Set up your creator profile',
-      body: 'Launch a visual-first account with gallery publishing, identity surfaces, and profile-led discovery.',
-    }
-  }
-  return {
-    shell: 'bg-[#f7f1ea] text-[#261811]',
-    panel: 'border border-[#ddcdbd] bg-[#fffaf4]',
-    side: 'border border-[#e8dbce] bg-[#f3e8db]',
-    muted: 'text-[#71574a]',
-    action: 'bg-[#5b2b3b] text-[#fff0f5] hover:bg-[#74364b]',
-    icon: Bookmark,
-    title: 'Create a curator account',
-    body: 'Build shelves, save references, and connect collections to your profile without a generic feed setup.',
-  }
-}
+const perks = [
+  'Bookmark articles and return on any device with your saved session',
+  'Optional writer tools when you are ready to pitch or publish',
+  'Same calm teal experience as the rest of the magazine site',
+]
 
 export default function RegisterPage() {
-  if (REGISTER_PAGE_OVERRIDE_ENABLED) {
-    return <RegisterPageOverride />
-  }
-
-  const { recipe } = getFactoryState()
-  const productKind = getProductKind(recipe)
-  const config = getRegisterConfig(productKind)
-  const Icon = config.icon
-
   return (
-    <div className={`min-h-screen ${config.shell}`}>
-      <NavbarShell />
-      <main className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <section className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
-          <div className={`rounded-[2rem] p-8 ${config.side}`}>
-            <Icon className="h-8 w-8" />
-            <h1 className="mt-5 text-4xl font-semibold tracking-[-0.05em]">{config.title}</h1>
-            <p className={`mt-5 text-sm leading-8 ${config.muted}`}>{config.body}</p>
-            <div className="mt-8 grid gap-4">
-              {['Different onboarding per product family', 'No repeated one-size-fits-all shell', 'Profile, publishing, and discovery aligned'].map((item) => (
-                <div key={item} className="rounded-[1.5rem] border border-current/10 px-4 py-4 text-sm">{item}</div>
-              ))}
+    <MagazineShell
+      hero={
+        <MagazinePageHeader
+          eyebrow="Join"
+          title="Create your account"
+          description={`Set up a free ${SITE_CONFIG.name} profile to follow stories, save your place, and get in touch with the desk when you are ready to contribute.`}
+        />
+      }
+    >
+      <MagazineContentSection className="!py-10">
+        <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:items-start">
+          <div className="space-y-8">
+            <div className="relative min-h-[260px] overflow-hidden rounded-[2rem] shadow-lg lg:min-h-[320px]">
+              <ContentImage
+                src="https://images.unsplash.com/photo-1524995997946-a1c024e0a646?auto=format&fit=crop&w=1200&q=80"
+                alt=""
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#062c2a]/90 via-[#062c2a]/35 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-8 text-white">
+                <Newspaper className="h-9 w-9 text-[#a8ebe3]" />
+                <h2 className="mt-4 text-2xl font-bold tracking-tight">Readers and writers welcome</h2>
+                <p className="mt-2 max-w-md text-sm leading-relaxed text-white/85">
+                  One account for the article library and the profile directory—no separate “consumer” vs “creator” silos.
+                </p>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0c6b62]">What you get</p>
+              <ul className="mt-4 space-y-3">
+                {perks.map((line) => (
+                  <li key={line} className="flex gap-3 text-sm text-slate-600">
+                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#e0f5f2] text-[#0c3d3a]">
+                      <Check className="h-3.5 w-3.5" />
+                    </span>
+                    <span>{line}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-6 text-xs leading-relaxed text-slate-500">
+                By creating an account you agree to our{' '}
+                <Link href="/terms" className="font-semibold text-[#0c6b62] hover:underline">
+                  Terms of Use
+                </Link>{' '}
+                and{' '}
+                <Link href="/privacy" className="font-semibold text-[#0c6b62] hover:underline">
+                  Privacy Policy
+                </Link>
+                .
+              </p>
             </div>
           </div>
 
-          <div className={`rounded-[2rem] p-8 ${config.panel}`}>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] opacity-70">Create account</p>
-            <form className="mt-6 grid gap-4">
-              <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="Full name" />
-              <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="Email address" />
-              <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="Password" type="password" />
-              <input className="h-12 rounded-xl border border-current/10 bg-transparent px-4 text-sm" placeholder="What are you creating or publishing?" />
-              <button type="submit" className={`inline-flex h-12 items-center justify-center rounded-full px-6 text-sm font-semibold ${config.action}`}>Create account</button>
-            </form>
-            <div className={`mt-6 flex items-center justify-between text-sm ${config.muted}`}>
-              <span>Already have an account?</span>
-              <Link href="/login" className="inline-flex items-center gap-2 font-semibold hover:underline">
-                <Sparkles className="h-4 w-4" />
-                Sign in
-              </Link>
-            </div>
-          </div>
-        </section>
-      </main>
-      <Footer />
-    </div>
+          <MagazineRegisterForm />
+        </div>
+      </MagazineContentSection>
+    </MagazineShell>
   )
 }
