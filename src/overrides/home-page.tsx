@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { BookOpen, Calendar, ChevronRight, Compass, FileText, Mail, MapPin, Play, Quote, Sparkles, TrendingUp, UserRound } from 'lucide-react'
 import { format } from 'date-fns'
+import { Suspense } from 'react'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
 import { SchemaJsonLd } from '@/components/seo/schema-jsonld'
@@ -33,11 +34,12 @@ function getCategory(post?: SitePost | null) {
 
 function formatPostDate(post?: SitePost | null) {
   const raw = post?.publishedAt || post?.createdAt
-  if (!raw) return format(new Date(), 'MMMM d, yyyy')
+  // Avoid rendering "now" on the server to prevent hydration mismatches (timezone / timing).
+  if (!raw) return '—'
   try {
     return format(new Date(raw), 'MMMM d, yyyy')
   } catch {
-    return format(new Date(), 'MMMM d, yyyy')
+    return '—'
   }
 }
 
@@ -96,7 +98,9 @@ export async function HomePageOverride() {
 
   return (
     <div className="min-h-screen bg-[#f6f8f7] text-slate-900">
-      <NavbarShell />
+      <Suspense fallback={<div className="h-20 bg-[#f6f8f7]" />}>
+        <NavbarShell />
+      </Suspense>
       <SchemaJsonLd data={schemaData} />
 
       <section className="relative -mt-[4.25rem] min-h-[min(92vh,760px)] overflow-hidden pt-[4.25rem]">
@@ -354,31 +358,6 @@ export async function HomePageOverride() {
               <span className="relative text-2xl font-bold text-white">{cat.label}</span>
             </Link>
           ))}
-        </div>
-      </section>
-
-      <section className="bg-[#eef1f0] py-14">
-        <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] shadow-xl">
-            <ContentImage
-              src="https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=1200&q=80"
-              alt=""
-              fill
-              className="object-cover"
-            />
-          </div>
-          <div className="rounded-[2rem] border border-slate-200/80 bg-[#f9faf9] p-8 shadow-sm lg:p-10">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0c6b62]">Upcoming</p>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-900">Live reader salon: profiles &amp; process</h2>
-            <p className="mt-4 font-mono text-3xl font-semibold tracking-widest text-[#0c3d3a]">09 : 14 : 23 : 01</p>
-            <p className="mt-2 text-sm text-slate-600">Join us for a live conversation with featured contributors.</p>
-            <Link
-              href="/contact"
-              className="mt-8 inline-flex items-center justify-center rounded-full bg-[#1a9b8f] px-8 py-3 text-sm font-semibold text-white shadow-md transition-colors hover:bg-[#158a7f]"
-            >
-              Register now
-            </Link>
-          </div>
         </div>
       </section>
 

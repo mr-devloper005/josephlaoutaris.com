@@ -2,10 +2,10 @@ import type { TaskKey } from '@/lib/site-config'
 
 export const siteContent = {
   navbar: {
-    tagline: 'Article , Social profile platform',
+    tagline: '',
   },
   footer: {
-    tagline: 'Article , Social profile platform',
+    tagline: '',
   },
   hero: {
     badge: 'Latest stories and visuals',

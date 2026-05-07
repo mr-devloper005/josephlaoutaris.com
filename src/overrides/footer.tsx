@@ -38,11 +38,6 @@ export function FooterOverride() {
               <span className="text-lg font-semibold">{SITE_CONFIG.name}</span>
             </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/75">{SITE_CONFIG.description}</p>
-            <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-white/50">Get the app</p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <span className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-xs font-medium text-white/80">App Store</span>
-              <span className="rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-xs font-medium text-white/80">Google Play</span>
-            </div>
           </div>
 
           <div>

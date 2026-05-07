@@ -20,7 +20,6 @@ export const NAVBAR_OVERRIDE_ENABLED = true
 const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'Articles', href: '/articles' },
-  { label: 'Profiles', href: '/profile' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
 ]

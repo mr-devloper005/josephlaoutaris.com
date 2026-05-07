@@ -2,6 +2,7 @@ import { Clock, FileText, Mail, MapPin, MessageSquare, Sparkles, UserRound } fro
 import { MagazineShell, MagazineContentSection, MagazinePageHeader } from '@/components/magazine/magazine-shell'
 import { MagazineContactForm } from '@/components/magazine/magazine-contact-form'
 import { SITE_CONFIG } from '@/lib/site-config'
+import { Button } from '@/components/ui/button'
 
 const lanes = [
   {
@@ -22,6 +23,8 @@ const lanes = [
 ]
 
 export default function ContactPage() {
+  const contactEmail = process.env.CONTACT_EMAIL || 'contact@example.com'
+
   return (
     <MagazineShell
       hero={
@@ -67,6 +70,12 @@ export default function ContactPage() {
                   <span>We are a distributed newsroom; include your time zone when scheduling matters.</span>
                 </li>
               </ul>
+              <Button className="mt-6 w-full bg-[#1a9b8f] text-white hover:bg-[#158a7f]" asChild>
+                <a href={`mailto:${contactEmail}`}>
+                  <Mail className="mr-2 h-4 w-4" />
+                  Email Us Directly
+                </a>
+              </Button>
             </div>
 
             <div className="flex items-start gap-3 rounded-2xl border border-dashed border-[#1a9b8f]/40 bg-[#f6f8f7] p-5">
