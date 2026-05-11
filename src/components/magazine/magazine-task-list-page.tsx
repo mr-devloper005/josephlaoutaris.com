@@ -67,12 +67,6 @@ export async function MagazineTaskListPage({ task, category }: { task: 'article'
                 >
                   Pitch a story
                 </Link>
-                <Link
-                  href={isArticle ? '/profile' : '/articles'}
-                  className="inline-flex items-center justify-center rounded-full border border-white/40 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur hover:bg-white/15"
-                >
-                  {isArticle ? 'Browse profiles' : 'Read articles'}
-                </Link>
               </div>
             </div>
             <div className="rounded-2xl border border-white/20 bg-black/25 p-5 backdrop-blur-md">

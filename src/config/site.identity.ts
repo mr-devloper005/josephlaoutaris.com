@@ -1,10 +1,10 @@
 export const siteIdentity = {
   code: process.env.NEXT_PUBLIC_SITE_CODE || 'r0n8xm9qza',
   name: process.env.NEXT_PUBLIC_SITE_NAME || 'Josephlaoutaris',
-  tagline: process.env.NEXT_PUBLIC_SITE_TAGLINE || 'Article , Social profile platform',
+  tagline: process.env.NEXT_PUBLIC_SITE_TAGLINE || 'Article platform',
   description:
     process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
-    'A article , social profile site for Josephlaoutaris, built for clean discovery and structured publishing.',
+    'An article site for Josephlaoutaris, built for clean discovery and structured publishing.',
   domain: process.env.NEXT_PUBLIC_SITE_DOMAIN || 'josephlaoutaris.com',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://josephlaoutaris.com',
   ogImage: process.env.NEXT_PUBLIC_SITE_OG_IMAGE || '/og-default.png',

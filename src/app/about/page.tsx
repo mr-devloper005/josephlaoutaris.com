@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, Feather, HeartHandshake, Lightbulb, Mail, Target, Users } from 'lucide-react'
+import { Feather, HeartHandshake, Lightbulb, Mail, Target, Users } from 'lucide-react'
 import { MagazineShell, MagazineContentSection, MagazinePageHeader } from '@/components/magazine/magazine-shell'
 import { Button } from '@/components/ui/button'
 import { ContentImage } from '@/components/shared/content-image'
@@ -76,13 +76,6 @@ export default function AboutPage() {
               Whether you arrive through a bookmarked essay or a profile that caught your eye, the experience should feel coherent:
               same palette, same rhythm, same respect for your attention.
             </p>
-            <Link
-              href="/profile"
-              className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#0c6b62] hover:underline"
-            >
-              Meet our contributors
-              <ArrowRight className="h-4 w-4" />
-            </Link>
           </div>
         </div>
       </MagazineContentSection>
