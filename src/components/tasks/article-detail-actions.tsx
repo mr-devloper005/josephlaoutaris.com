@@ -2,7 +2,9 @@
 
 import { useMemo, useState } from "react";
 import { Heart, Link as LinkIcon, Share2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/lib/auth-context";
 
 type Props = {
   url: string;
@@ -33,6 +35,8 @@ async function copyToClipboard(text: string) {
 }
 
 export function ArticleDetailActions({ url, title }: Props) {
+  const router = useRouter();
+  const { isAuthenticated } = useAuth();
   const [liked, setLiked] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -44,7 +48,13 @@ export function ArticleDetailActions({ url, title }: Props) {
         type="button"
         variant="ghost"
         className="gap-2 rounded-full px-3"
-        onClick={() => setLiked((prev) => !prev)}
+        onClick={() => {
+          if (!isAuthenticated) {
+            router.push("/login");
+            return;
+          }
+          setLiked((prev) => !prev);
+        }}
         aria-pressed={liked}
       >
         <Heart className={liked ? "h-4 w-4 fill-current" : "h-4 w-4"} />
