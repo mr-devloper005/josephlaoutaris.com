@@ -1,7 +1,6 @@
 import Link from 'next/link'
-import { BookOpen, Calendar, ChevronRight, Compass, FileText, Mail, MapPin, Play, Quote, Sparkles, TrendingUp, UserRound } from 'lucide-react'
+import { BookOpen, ChevronRight, Compass, FileText, Mail, MapPin, Quote, Sparkles, TrendingUp, UserRound } from 'lucide-react'
 import { format } from 'date-fns'
-import { Suspense } from 'react'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
 import { SchemaJsonLd } from '@/components/seo/schema-jsonld'
@@ -48,22 +47,18 @@ const heroBackdrop =
 
 const categoryTiles = [
   { label: 'Essays', src: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80' },
-  { label: 'Profiles', src: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=800&q=80' },
+  { label: 'Reviews', src: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80' },
   { label: 'Field notes', src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=800&q=80' },
   { label: 'Culture', src: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80' },
 ]
 
 export async function HomePageOverride() {
-  const [articlePosts, profilePosts] = await Promise.all([
-    fetchTaskPosts('article', 14, { allowMockFallback: true, fresh: true }),
-    fetchTaskPosts('profile', 8, { allowMockFallback: true, fresh: true }),
-  ])
+  const articlePosts = await fetchTaskPosts('article', 14, { allowMockFallback: true, fresh: true })
 
   const lead = articlePosts[0]
   const featured = articlePosts.slice(0, 6)
   const latest = articlePosts.slice(1, 7)
   const trending = articlePosts.slice(0, 5)
-  const spotlightProfiles = profilePosts.slice(0, 2)
   const schemaData = [
     {
       '@context': 'https://schema.org',
@@ -86,8 +81,7 @@ export async function HomePageOverride() {
     },
   ]
 
-  const heroTitle = lead?.title || 'Long reads, sharp profiles, and voices worth following'
-  const heroDate = formatPostDate(lead)
+  const heroTitle = lead?.title || 'Long reads, sharp analysis, and voices worth following'
 
   const highlights = [
     { title: 'Editor picks', sub: 'Fresh angles each week', icon: Sparkles },
@@ -98,9 +92,7 @@ export async function HomePageOverride() {
 
   return (
     <div className="min-h-screen bg-[#f6f8f7] text-slate-900">
-      <Suspense fallback={<div className="h-20 bg-[#f6f8f7]" />}>
-        <NavbarShell />
-      </Suspense>
+      <NavbarShell />
       <SchemaJsonLd data={schemaData} />
 
       <section className="relative -mt-[4.25rem] min-h-[min(92vh,760px)] overflow-hidden pt-[4.25rem]">
@@ -119,16 +111,14 @@ export async function HomePageOverride() {
               </span>
             </div>
             <h1 className="mt-5 text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">{heroTitle}</h1>
-            <div className="mt-4 flex items-center gap-2 text-sm text-white/85">
-              <Calendar className="h-4 w-4 shrink-0" />
-              <span>{heroDate}</span>
-              {lead ? (
-                <Link href={`/articles/${lead.slug}`} className="ml-2 inline-flex items-center gap-1 font-semibold text-[#7ee0d3] hover:underline">
+            {lead ? (
+              <div className="mt-4">
+                <Link href={`/articles/${lead.slug}`} className="inline-flex items-center gap-1 text-sm font-semibold text-[#7ee0d3] hover:underline">
                   Read now
                   <ChevronRight className="h-4 w-4" />
                 </Link>
-              ) : null}
-            </div>
+              </div>
+            ) : null}
           </div>
 
           <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -154,7 +144,7 @@ export async function HomePageOverride() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-[#0c6b62]">Site guide</p>
           <h2 className="mx-auto mt-2 max-w-2xl text-center text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-            Explore articles, profiles, and policies
+            Explore articles and policies
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-center text-sm leading-relaxed text-slate-600">
             Same teal palette as the homepage—pick a destination and keep reading without switching visual languages.
@@ -162,7 +152,6 @@ export async function HomePageOverride() {
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
               { href: '/articles', title: 'Articles', desc: 'Long reads, reporting, and commentary.', icon: FileText },
-              { href: '/profile', title: 'Profiles', desc: 'Writers, editors, and local voices.', icon: UserRound },
               { href: '/about', title: 'About', desc: 'Mission, standards, and how we work.', icon: BookOpen },
               { href: '/contact', title: 'Contact', desc: 'Tips, corrections, and partnerships.', icon: Mail },
             ].map(({ href, title, desc, icon: Icon }) => (
@@ -311,34 +300,18 @@ export async function HomePageOverride() {
               </ol>
             </div>
 
-            <div>
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-bold text-slate-900">Spotlight profiles</h3>
-                <Link href="/profile" className="text-sm font-semibold text-[#0c6b62] hover:underline">
-                  See all
-                </Link>
-              </div>
-              <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                {(spotlightProfiles.length
-                  ? spotlightProfiles
-                  : [{ id: 'ph', title: 'Browse profiles', slug: '', summary: 'Meet writers and contributors.', content: null, media: [] } as SitePost]
-                ).map((post) => {
-                  const href = post.slug ? `/profile/${post.slug}` : '/profile'
-                  return (
-                    <Link key={post.id} href={href} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                      <div className="relative aspect-video bg-slate-100">
-                        <ContentImage src={getPostImage(post)} alt={post.title} fill className="object-cover" />
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 transition-opacity group-hover:opacity-100">
-                          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/95 text-[#0c3d3a] shadow">
-                            <Play className="ml-0.5 h-5 w-5 fill-current" />
-                          </span>
-                        </div>
-                      </div>
-                      <p className="p-3 text-sm font-semibold text-slate-900 group-hover:text-[#0c6b62]">{post.title}</p>
-                    </Link>
-                  )
-                })}
-              </div>
+            <div className="rounded-3xl border border-slate-200 bg-white p-6">
+              <h3 className="text-lg font-bold text-slate-900">Newsletter</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                Get new long-form pieces, interviews, and weekly editor picks in your inbox.
+              </p>
+              <Link
+                href="/contact"
+                className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-[#0c6b62] hover:underline"
+              >
+                Contact the editorial team
+                <ChevronRight className="h-4 w-4" />
+              </Link>
             </div>
           </aside>
         </div>

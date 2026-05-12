@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { Facebook, Instagram, Youtube } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/site-config'
 
 export const FOOTER_OVERRIDE_ENABLED = true
@@ -7,7 +6,6 @@ export const FOOTER_OVERRIDE_ENABLED = true
 const pages = [
   { name: 'Home', href: '/' },
   { name: 'Articles', href: '/articles' },
-  { name: 'Profiles', href: '/profile' },
   { name: 'About', href: '/about' },
 ]
 
@@ -17,19 +15,13 @@ const legal = [
   { name: 'Cookie Policy', href: '/cookies' },
 ]
 
-const social = [
-  { name: 'Facebook', href: 'https://facebook.com', icon: Facebook },
-  { name: 'Instagram', href: 'https://instagram.com', icon: Instagram },
-  { name: 'YouTube', href: 'https://youtube.com', icon: Youtube },
-]
-
 export function FooterOverride() {
   const year = new Date().getFullYear()
 
   return (
     <footer className="bg-[#062c2a] text-white">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
           <div>
             <Link href="/" className="flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/10 p-1">
@@ -51,6 +43,12 @@ export function FooterOverride() {
                 </li>
               ))}
             </ul>
+            <Link
+              href="/contact"
+              className="mt-5 inline-flex items-center justify-center rounded-full bg-[#1a9b8f] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#158a7f]"
+            >
+              Contact
+            </Link>
           </div>
 
           <div>
@@ -66,23 +64,6 @@ export function FooterOverride() {
             </ul>
           </div>
 
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-[#5ec4b8]">Follow us</h3>
-            <div className="mt-4 flex gap-3">
-              {social.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/90 transition-colors hover:bg-[#1a9b8f] hover:text-white"
-                >
-                  <item.icon className="h-5 w-5" />
-                  <span className="sr-only">{item.name}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
         </div>
 
         <div className="mt-12 border-t border-white/10 pt-6 text-center text-sm text-white/55">

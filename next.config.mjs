@@ -24,13 +24,13 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/articles',
-        destination: '/article',
+        source: '/article',
+        destination: '/articles',
         permanent: true,
       },
       {
-        source: '/articles/:slug*',
-        destination: '/article/:slug*',
+        source: '/article/:slug*',
+        destination: '/articles/:slug*',
         permanent: true,
       },
       {
@@ -78,14 +78,6 @@ const nextConfig = {
 
   async rewrites() {
     return [
-      {
-        source: '/article',
-        destination: '/articles',
-      },
-      {
-        source: '/article/:slug*',
-        destination: '/articles/:slug*',
-      },
       {
         source: '/classified',
         destination: '/classifieds',

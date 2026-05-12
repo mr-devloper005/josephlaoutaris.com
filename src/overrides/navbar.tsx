@@ -55,7 +55,6 @@ export function NavbarOverride() {
           </div>
           <div className="min-w-0">
             <span className="block truncate text-lg font-semibold tracking-tight">{SITE_CONFIG.name}</span>
-            <span className="hidden text-[10px] font-medium uppercase tracking-[0.2em] text-white/70 sm:block">Articles &amp; profiles</span>
           </div>
         </Link>
 
