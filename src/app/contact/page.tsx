@@ -1,56 +1,87 @@
-import { Mail, MessageSquareText, ShieldCheck } from 'lucide-react';
+import { Clock, FileText, Mail, MapPin, MessageSquare, Sparkles, UserRound } from 'lucide-react'
+import { MagazineShell, MagazineContentSection, MagazinePageHeader } from '@/components/magazine/magazine-shell'
+import { MagazineContactForm } from '@/components/magazine/magazine-contact-form'
+import { SITE_CONFIG } from '@/lib/site-config'
+import { ContactLeadForm } from "@/components/shared/contact-lead-form";
 
-import { ContactLeadForm } from '@/components/shared/contact-lead-form';
-import { Footer } from '@/components/shared/footer';
-import { NavbarShell } from '@/components/shared/navbar-shell';
-
-const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'Josephlaoutaris';
-
-const contactHighlights = [
-  { icon: Mail, title: 'Direct response', copy: 'Your message is saved securely and routed to the right team.' },
-  { icon: MessageSquareText, title: 'Clear details', copy: 'Share your requirement, question, or collaboration idea in one place.' },
-  { icon: ShieldCheck, title: 'Reliable follow-up', copy: 'We keep the request record so every conversation stays traceable.' },
-];
+const lanes = [
+  {
+    icon: FileText,
+    title: 'Editorial & pitches',
+    body: 'Long-form ideas, reporting tips, and corrections on published pieces. Include links and deadlines when they matter.',
+  },
+  {
+    icon: UserRound,
+    title: 'Profiles & bios',
+    body: 'Updates to your contributor profile, headshots, or focus areas—so readers always see the right version of your story.',
+  },
+  {
+    icon: Sparkles,
+    title: 'Partnerships',
+    body: 'Newsletter sponsorships, cross-promotions, and live events. Tell us your audience and what success looks like.',
+  },
+]
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-[#f7f1e8] text-stone-950">
-      <NavbarShell />
-      <main>
-        <section className="relative overflow-hidden px-6 py-20 md:px-10 lg:px-16">
-          <div className="absolute left-[-10%] top-10 h-72 w-72 rounded-full bg-amber-200/40 blur-3xl" />
-          <div className="absolute bottom-0 right-[-8%] h-80 w-80 rounded-full bg-stone-300/50 blur-3xl" />
-
-          <div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-            <div>
-              <p className="text-sm font-black uppercase tracking-[0.35em] text-stone-500">Contact</p>
-              <h1 className="mt-5 max-w-3xl text-5xl font-black leading-[0.95] tracking-[-0.06em] text-stone-950 md:text-7xl">
-                Let&apos;s talk about your next move.
-              </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-700">
-                Use this form to reach {siteName}. Your request will be recorded and shared with the support team for follow-up.
-              </p>
-
-              <div className="mt-8 grid gap-4">
-                {contactHighlights.map((item) => (
-                  <div key={item.title} className="flex gap-4 rounded-3xl border border-stone-200 bg-white/60 p-5 shadow-sm">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-stone-950 text-white">
-                      <item.icon className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <h2 className="text-base font-black text-stone-950">{item.title}</h2>
-                      <p className="mt-1 text-sm leading-6 text-stone-600">{item.copy}</p>
-                    </div>
+    <MagazineShell
+      hero={
+        <MagazinePageHeader
+          eyebrow="Contact"
+          title={`Talk to ${SITE_CONFIG.name}`}
+          description="We read every message. Choose the lane that fits, then use the form—clear subject lines and context get faster replies."
+        />
+      }
+    >
+      <MagazineContentSection className="!py-10">
+        <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:items-start">
+          <div className="space-y-6">
+            <div className="grid gap-4 sm:grid-cols-2">
+              {lanes.map(({ icon: Icon, title, body }) => (
+                <div key={title} className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0c3d3a] text-[#a8ebe3]">
+                    <Icon className="h-5 w-5" />
                   </div>
-                ))}
-              </div>
+                  <h2 className="mt-4 text-lg font-bold text-slate-900">{title}</h2>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">{body}</p>
+                </div>
+              ))}
             </div>
 
-            <ContactLeadForm />
+            <div className="rounded-2xl border border-slate-200/90 bg-gradient-to-br from-[#e8faf8] to-white p-6 shadow-sm">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-[#0c6b62]">Desk hours</h3>
+              <ul className="mt-4 space-y-3 text-sm text-slate-700">
+                <li className="flex items-start gap-3">
+                  <Clock className="mt-0.5 h-5 w-5 shrink-0 text-[#1a9b8f]" />
+                  <span>
+                    <strong className="text-slate-900">Mon–Thu</strong>, 9:00–17:00 local time for first responses on general mail.
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Mail className="mt-0.5 h-5 w-5 shrink-0 text-[#1a9b8f]" />
+                  <span>
+                    Prefer email? Use the form—your address is only used to reply to you, as described in our privacy policy.
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[#1a9b8f]" />
+                  <span>We are a distributed newsroom; include your time zone when scheduling matters.</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="flex items-start gap-3 rounded-2xl border border-dashed border-[#1a9b8f]/40 bg-[#f6f8f7] p-5">
+              <MessageSquare className="mt-0.5 h-5 w-5 shrink-0 text-[#0c6b62]" />
+              <p className="text-sm leading-relaxed text-slate-600">
+                For urgent legal or security issues, mark the subject line <strong className="text-slate-900">URGENT</strong> and include
+                affected URLs or account email so we can escalate quickly.
+              </p>
+            </div>
           </div>
-        </section>
-      </main>
-      <Footer />
-    </div>
-  );
+
+          <ContactLeadForm />
+        </div>
+      </MagazineContentSection>
+    </MagazineShell>
+  )
 }
